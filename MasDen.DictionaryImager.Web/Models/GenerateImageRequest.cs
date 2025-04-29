@@ -4,9 +4,11 @@ namespace MasDen.DictionaryImager.Web.Models;
 
 public record GenerateImageRequest
 {
-    public GenerateImageRequest(string prompt)
+    public GenerateImageRequest(string prompt, string model, int steps)
     {
         Prompt = "[" + prompt + "]";
+        Model = model;
+        Steps = steps == 0 ? 4 : steps;
     }
 
     public string Model { get; init; } = "black-forest-labs/FLUX.1-schnell-Free";

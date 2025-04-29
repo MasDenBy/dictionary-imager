@@ -38,6 +38,23 @@
         </label>
     </div>
     <div>
+        <label>
+            Select model:
+            <InputSelect @bind-Value="Model!.GenerateImageModel">
+                @foreach (var prompt in GenerateImageModels)
+                {
+                    <option value="@prompt">@prompt</option>
+                }
+            </InputSelect>
+        </label>
+    </div>
+    <div>
+        <label>
+            Steps (free: 4, max: 50):
+            <InputNumber @bind-Value="Model!.Steps" />
+        </label>
+    </div>
+    <div>
         <button type="submit">Generate Image</button>
     </div>
 </EditForm>
@@ -53,6 +70,11 @@
 
     private List<string> GenerateImagePrompts { get; set; } = new();
     private string ImageDataURL { get; set; } = string.Empty;
+    private List<string> GenerateImageModels { get; set; } = new()
+    {
+        "black-forest-labs/FLUX.1-schnell-Free",
+        "black-forest-labs/FLUX.1-dev"
+    };
 
     private string FailedPromptMessageDisplay { get; set; } = "none";
 
@@ -108,7 +130,7 @@
             BaseAddress = Settings.TogetherAiUri
         };
 
-        var requestBody = new GenerateImageRequest(Model.GenerateImagePrompt!);
+        var requestBody = new GenerateImageRequest(Model.GenerateImagePrompt!, Model.GenerateImageModel, Model.Steps);
 
         var request = new HttpRequestMessage(HttpMethod.Post, "images/generations")
         {
